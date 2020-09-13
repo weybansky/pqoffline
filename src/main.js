@@ -9,8 +9,8 @@ import "bootstrap";
 import axios from "axios";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-axios.defaults.baseURL = "http://exams-project.local/api";
-// axios.defaults.baseURL = "https://exams.weybanskytech.com.ng/api";
+// axios.defaults.baseURL = "http://exams-project.local/api";
+axios.defaults.baseURL = "https://exams.weybanskytech.com.ng/api";
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 let token = localStorage.getItem("token");
 axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
