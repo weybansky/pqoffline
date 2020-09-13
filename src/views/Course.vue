@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-2">
-    <h3>Hello, {{ user ? user.full_name : "" }}</h3>
+    <h3>{{ course.title ? course.title.toUpperCase() : "" }}</h3>
     <div class="row justify-content-center">
       <div class="col-12">
         <div class="table-responsive">
@@ -8,20 +8,24 @@
             <thead>
               <tr>
                 <th width="10">S/N</th>
-                <th>Course</th>
-                <th>Years</th>
+                <th>Year</th>
+                <th>Questions</th>
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody v-if="courses.length">
-              <tr v-for="(course, index) in courses" :key="course.id">
+            <tbody v-if="course.past_exams">
+              <tr v-for="(exam, index) in course.past_exams" :key="exam.id">
                 <td>{{ ++index }}</td>
-                <td>{{ course.title.toUpperCase() }}</td>
-                <td>{{ course.past_exams.length }}</td>
+                <td>{{ exam.year }}</td>
+                <td>{{ exam.questions.length }}</td>
                 <td>
                   <button
                     class="btn btn-sm btn-dark"
-                    @click="$router.push({ path: '/courses/' + course.id })"
+                    @click="
+                      $router.push({
+                        path: '/courses/' + course.id + '/exams/' + exam.id
+                      })
+                    "
                   >
                     View
                   </button>
@@ -33,9 +37,9 @@
                 <td class="text-center" colspan="4">
                   You were not assigned any year to fill. <br />
                   Click here to sync if this is an error. <br />
-                  <button class="btn btn-sm btn-dark" @click="syncCourses">
+                  <!-- <button class="btn btn-sm btn-dark" @click="syncCourses">
                     Get Courses
-                  </button>
+                  </button> -->
                 </td>
               </tr>
             </tbody>
@@ -48,24 +52,36 @@
 
 <script>
 export default {
-  name: "Home",
+  name: "Course",
   data() {
     return {
       user: {},
-      courses: []
+      course: {}
     };
   },
+
+  beforeRouteUpdate(to, from, next) {
+    const id = to.params.course;
+    this.getCourse(id);
+    next();
+  },
+
   mounted() {
     this.getUser();
-    this.getCourses();
+    const id = this.$route.params.course;
+    this.getCourse(id);
   },
+
   methods: {
     getUser() {
       this.user = JSON.parse(localStorage.getItem("user"));
     },
-    getCourses() {
-      this.courses = JSON.parse(localStorage.getItem("courses"));
+
+    getCourse(id) {
+      const courses = JSON.parse(localStorage.getItem("courses"));
+      this.course = courses.filter(c => c.id == id)[0];
     },
+
     syncCourses() {
       if (navigator.onLine == false) {
         alert("You connect to the Internet and try again");
