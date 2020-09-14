@@ -29,11 +29,9 @@
                 <td>
                   <button
                     class="btn btn-sm btn-dark"
-                    @click="
-                      $router.push({
-                        path: '/courses/' + course.id + '/exams/' + exam.id
-                      })
-                    "
+                    @click="selectedQuestion = question"
+                    data-toggle="modal"
+                    data-target="#questionModal"
                   >
                     View
                   </button>
@@ -55,17 +53,26 @@
         </div>
       </div>
     </div>
+    <question :question="selectedQuestion"></question>
   </div>
 </template>
 
 <script>
+import question from "@/components/Question";
+
 export default {
   name: "Exam",
+
+  components: {
+    question
+  },
+
   data() {
     return {
       user: {},
       course: {},
-      exam: {}
+      exam: {},
+      selectedQuestion: {}
     };
   },
 

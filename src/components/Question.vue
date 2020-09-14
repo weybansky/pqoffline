@@ -1,0 +1,59 @@
+<template>
+  <modal id="questionModal">
+    <template slot="title"> Question {{ question.number }} </template>
+    <template slot="body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-success">
+            <div class="panel-heading">
+              <h5 class="panel-title mb-3">
+                {{ question.question }}
+              </h5>
+            </div>
+            <div class="panel-body">
+              <div
+                class="label-options"
+                v-for="(n, index) in question.no_of_options"
+                :key="index"
+              >
+                <label
+                  :for="'option_' + n"
+                  :class="{
+                    'bg-success text-white':
+                      question.answer == question['option_' + n]
+                  }"
+                >
+                  {{ question["option_" + n] }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template slot="footer">
+      <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">
+        Close
+      </button>
+      <!-- <button type="button" class="btn btn-info">Save</button> -->
+    </template>
+  </modal>
+</template>
+
+<script>
+import modal from "@/components/Modal";
+export default {
+  props: ["question"],
+  components: { modal }
+};
+</script>
+
+<style scoped>
+.label-options label {
+  border: 1px solid #777;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  width: 100%;
+  padding: 10px;
+}
+</style>

@@ -1,13 +1,20 @@
 <template>
   <div class="container mt-2">
-    <h3>Hello, {{ user ? user.full_name : "" }}</h3>
+    <h4>Hello, {{ user ? user.full_name : "" }}</h4>
+    <button
+      v-if="courses.length"
+      class="btn btn-sm btn-dark mb-2"
+      @click="syncCourses"
+    >
+      Sync
+    </button>
     <div class="row justify-content-center">
       <div class="col-12">
         <div class="table-responsive">
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th width="10">S/N</th>
+                <th>S/N</th>
                 <th>Course</th>
                 <th>Years</th>
                 <th>Action</th>
@@ -70,7 +77,6 @@ export default {
       if (navigator.onLine == false) {
         alert("You connect to the Internet and try again");
       } else {
-        console.log("Sync-ing....");
         window.axios
           .get("pqoffline/data")
           .then(response => {
@@ -81,7 +87,7 @@ export default {
           })
           .catch(error => {
             this.errors = error.response.data.errors;
-            alert(error.response.data.message);
+            alert("Cannot Sync at the moment. Please try again");
           });
       }
     }
