@@ -4,13 +4,72 @@
       {{ exam.year || "??" }} --
       {{ course.title || "??" }}
     </h3>
+    <div>
+      <question-form
+        :exam="exam"
+        :offlineQuestions="offlineQuestions"
+        :topics="course.topics"
+        @added="questionAdded"
+      ></question-form>
+    </div>
     <div class="row justify-content-center">
       <div class="col-12">
         <div class="table-responsive">
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th width="10">S/N</th>
+                <th class="text-center" colspan="5">Saved Offline</th>
+              </tr>
+              <tr>
+                <th>S/N</th>
+                <th>Number</th>
+                <th>Question</th>
+                <th>Topic</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody v-if="offlineQuestions.length > 0">
+              <tr v-for="(question, index) in offlineQuestions" :key="index">
+                <td>{{ ++index }}</td>
+                <td>{{ question.number }}</td>
+                <td>{{ question.question }}</td>
+                <td>{{ question.topic ? question.topic.title : "" }}</td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-dark"
+                    @click="selectedQuestion = question"
+                    data-toggle="modal"
+                    data-target="#questionModal"
+                  >
+                    View
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <tbody v-else>
+              <tr>
+                <td class="text-center" colspan="5">
+                  You have no saved offline questions. <br />
+                  <!-- <button class="btn btn-sm btn-dark" @click="syncCourses">
+                    Get Courses
+                  </button> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th class="text-center" colspan="5">Saved Online</th>
+              </tr>
+              <tr>
+                <th>S/N</th>
                 <th>Number</th>
                 <th>Question</th>
                 <th>Topic</th>
@@ -59,21 +118,42 @@
 
 <script>
 import question from "@/components/Question";
+import questionForm from "@/components/QuestionForm";
 
 export default {
   name: "Exam",
-
   components: {
-    question
+    question,
+    "question-form": questionForm
   },
-
   data() {
     return {
       user: {},
-      course: {},
-      exam: {},
+      course: {
+        topics: []
+      },
+      exam: {
+        questions: []
+      },
       selectedQuestion: {}
     };
+  },
+  computed: {
+    offlineQuestions() {
+      let store = localStorage.getItem("questions");
+      if (store == null) {
+        return [];
+      } else {
+        store = JSON.parse(store);
+        store = store.filter(s => s.exam_id == this.exam.id);
+        const topics = this.course.topics;
+        store.map(que => {
+          que.topic = topics.filter(t => t.id == que.topic_id)[0];
+          return que;
+        });
+        return store;
+      }
+    }
   },
 
   beforeRouteUpdate(to, from, next) {
@@ -99,6 +179,13 @@ export default {
       const courses = JSON.parse(localStorage.getItem("courses"));
       this.course = courses.filter(c => c.id == id)[0];
       this.exam = this.getExam(examId);
+    },
+
+    questionAdded() {
+      const id = this.$route.params.course;
+      const examId = this.$route.params.exam;
+      this.getCourse(id, examId);
+      alert("Question Added");
     },
 
     getExam(id) {
