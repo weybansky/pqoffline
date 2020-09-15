@@ -11,7 +11,7 @@
               </h5>
             </div>
             <div class="panel-body">
-              <label
+              <div
                 v-for="(n, index) in question.no_of_options"
                 :key="n"
                 :index="index"
@@ -21,9 +21,8 @@
                   'bg-success text-white':
                     question.answer == question['option_' + n]
                 }"
-              >
-                {{ question["option_" + n] }}
-              </label>
+                v-html="question['option_' + n]"
+              ></div>
             </div>
           </div>
         </div>
@@ -41,7 +40,15 @@
 <script>
 import modal from "@/components/Modal";
 export default {
-  props: ["question"],
+  props: {
+    question: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {};
+      }
+    }
+  },
   components: { modal }
 };
 </script>
