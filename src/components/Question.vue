@@ -12,17 +12,17 @@
             </div>
             <div class="panel-body">
               <div
-                v-for="(n, index) in question.no_of_options"
+                v-for="n in 4"
                 :key="n"
-                :index="index"
-                :for="'option_' + n"
                 class="label-option"
                 :class="{
                   'bg-success text-white':
                     question.answer == question['option_' + n]
                 }"
-                v-html="question['option_' + n]"
-              ></div>
+              >
+                {{ n }}). &nbsp; &nbsp;
+                {{ question["option_" + n] }}
+              </div>
             </div>
           </div>
         </div>
