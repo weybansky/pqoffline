@@ -11,21 +11,19 @@
               </h5>
             </div>
             <div class="panel-body">
-              <div
-                class="label-options"
+              <label
                 v-for="(n, index) in question.no_of_options"
-                :key="index"
+                :key="n"
+                :index="index"
+                :for="'option_' + n"
+                class="label-option"
+                :class="{
+                  'bg-success text-white':
+                    question.answer == question['option_' + n]
+                }"
               >
-                <label
-                  :for="'option_' + n"
-                  :class="{
-                    'bg-success text-white':
-                      question.answer == question['option_' + n]
-                  }"
-                >
-                  {{ question["option_" + n] }}
-                </label>
-              </div>
+                {{ question["option_" + n] }}
+              </label>
             </div>
           </div>
         </div>
@@ -49,7 +47,7 @@ export default {
 </script>
 
 <style scoped>
-.label-options label {
+.label-option {
   border: 1px solid #777;
   border-radius: 3px;
   margin-bottom: 5px;
