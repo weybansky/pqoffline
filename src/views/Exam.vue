@@ -135,7 +135,13 @@ export default {
       exam: {
         questions: []
       },
-      selectedQuestion: {}
+      selectedQuestion: {
+        no_of_options: 4,
+        option_1: "",
+        option_2: "",
+        option_3: "",
+        option_4: ""
+      }
     };
   },
   computed: {

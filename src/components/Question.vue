@@ -43,10 +43,7 @@ export default {
   props: {
     question: {
       type: Object,
-      required: true,
-      default: () => {
-        return {};
-      }
+      required: true
     }
   },
   components: { modal }
