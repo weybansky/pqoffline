@@ -86,9 +86,8 @@ export default {
         })
         .then(response => {
           const token = response.data.token;
-          window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
-          window.axios.defaults.headers.common["Authorization"] =
-            "Bearer " + token;
+          axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
+          axios.defaults.headers.common["Authorization"] = "Bearer " + token;
           localStorage.setItem("token", token);
           const user = JSON.stringify(response.data.user);
           localStorage.setItem("user", user);

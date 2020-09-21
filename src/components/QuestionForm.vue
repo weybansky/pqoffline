@@ -253,12 +253,12 @@ export default {
       store = JSON.parse(store);
       store.push(this.question);
       localStorage.setItem("questions", JSON.stringify(store));
-      this.question = {
-        exam_id: this.exam.id,
-        course_id: this.exam.course_id,
-        type: "objective",
-        no_of_options: 4
-      };
+      // this.question = {
+      //   exam_id: this.exam.id,
+      //   course_id: this.exam.course_id,
+      //   type: "objective",
+      //   no_of_options: 4
+      // };
       this.$emit("added");
     }
   }

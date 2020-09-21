@@ -191,6 +191,7 @@ export default {
       const id = this.$route.params.course;
       const examId = this.$route.params.exam;
       this.getCourse(id, examId);
+      this.exam = this.getExam(examId);
       alert("Question Added");
     },
 

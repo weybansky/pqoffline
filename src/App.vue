@@ -20,6 +20,7 @@
 
 <script>
 import navbar from "@/components/NavBar.vue";
+import axios from "axios";
 
 export default {
   // name: "Home",
@@ -36,7 +37,7 @@ export default {
           questions = JSON.parse(questions);
           questions.forEach(question => {
             console.log("Question", question);
-            window.axios
+            axios
               .post("pqoffline/upload", question)
               .then(response => {
                 console.log("Success", response.data);
@@ -48,7 +49,7 @@ export default {
               });
           });
         }
-        window.axios
+        axios
           .get("pqoffline/data")
           .then(response => {
             const courses = JSON.stringify(response.data.courses);

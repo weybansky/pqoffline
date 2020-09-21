@@ -24,7 +24,7 @@
               <tr v-for="(course, index) in courses" :key="course.id">
                 <td>{{ ++index }}</td>
                 <td>{{ course.title.toUpperCase() }}</td>
-                <td>{{ course.past_exams.length }}</td>
+                <td>{{ course.past_exams.length || 0 }}</td>
                 <td>
                   <button
                     class="btn btn-sm btn-dark"
@@ -38,8 +38,9 @@
             <tbody v-else>
               <tr>
                 <td class="text-center" colspan="4">
-                  You were not assigned any year to fill. <br />
-                  Click here to sync if this is an error. <br />
+                  You were not assigned any year to fill.
+                  <br />Click here to sync if this is an error.
+                  <br />
                   <button class="btn btn-sm btn-dark" @click="syncCourses">
                     Get Courses
                   </button>
@@ -54,6 +55,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Home",
   data() {
@@ -71,13 +73,19 @@ export default {
       this.user = JSON.parse(localStorage.getItem("user"));
     },
     getCourses() {
-      this.courses = JSON.parse(localStorage.getItem("courses"));
+      const courses = JSON.parse(localStorage.getItem("courses"));
+      if (courses)
+        this.courses = courses.sort((a, b) => {
+          if (a.title > b.title) return 1;
+          if (a.title < b.title) return -1;
+          return 0;
+        });
     },
     syncCourses() {
       if (navigator.onLine == false) {
         alert("You connect to the Internet and try again");
       } else {
-        window.axios
+        axios
           .get("pqoffline/data")
           .then(response => {
             const courses = JSON.stringify(response.data.courses);

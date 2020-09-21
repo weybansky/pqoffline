@@ -78,6 +78,11 @@ export default {
     getCourse(id) {
       const courses = JSON.parse(localStorage.getItem("courses"));
       this.course = courses.filter(c => c.id == id)[0];
+      if (this.course.past_exams.length) {
+        this.course.past_exams = this.course.past_exams.sort(
+          (a, b) => b.year - a.year
+        );
+      }
     }
   }
 };
